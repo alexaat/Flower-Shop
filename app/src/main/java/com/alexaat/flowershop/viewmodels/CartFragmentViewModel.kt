@@ -48,59 +48,41 @@ class CartFragmentViewModel(private val resources: Resources): ViewModel(){
             val getFlowersInCartDeferred = FlowersApi.retrofitService.getFlowersInCartAsync()
             try{
                 val flowerResult = getFlowersInCartDeferred.await()
-                _flowersInCart.value = flowerResult
                 var valueInCart = 0.0
                 for(f in flowerResult){
                     valueInCart+=f.available*f.price
                 }
-                if(valueInCart==0.0){
-                    _stockValueInCart.value = ""
-                }else{
-                    val formattedStockValue = DecimalFormat("#,###,##0.00").format(valueInCart)
-                    val text = resources.getString(R.string.unit_price_format, formattedStockValue)
-                    _stockValueInCart.value = text
-                }
+                val formattedStockValue = DecimalFormat("#,###,##0.00").format(valueInCart)
+                val text = resources.getString(R.string.unit_price_format, formattedStockValue)
+                _stockValueInCart.value = text
+                _flowersInCart.value = flowerResult
             }catch(e:Exception){
                 _flowersInCart.value = null
             }
         }
     }
 
-
     fun onDeleteButtonClicked(id:Long):Boolean{
         coroutineScope.launch {
             val removeItemFromCartDeferred = FlowersApi.retrofitService.removeFromCartAsync(id)
-            try{
-                val isRemoved = removeItemFromCartDeferred.await()
-                _isRemovedFromCart.value = isRemoved
-                _isRemovedFromCart.value = null
-            }catch(e: Exception){
-                _isRemovedFromCart.value = false
-                _isRemovedFromCart.value = null
-            }
-            val getFlowersInCartDeferred = FlowersApi.retrofitService.getFlowersInCartAsync()
-            try{
-                val flowerResult = getFlowersInCartDeferred.await()
-                if(flowerResult.isEmpty()){
+             try{
+                 val flowerResult = removeItemFromCartDeferred.await()
+                 if(flowerResult.isEmpty()){
                     _navigateToFlowerList.value = true
                     _navigateToFlowerList.value = false
-                }else {
-                    _flowersInCart.value = flowerResult
-                    var valueInCart = 0.0
-                    for(f in flowerResult){
+                 }else {
+                     var valueInCart = 0.0
+                     for(f in flowerResult){
                         valueInCart+=f.available*f.price
-                    }
-                    if(valueInCart==0.0){
-                        _stockValueInCart.value = ""
-                    }else{
-                        val formattedStockValue = DecimalFormat("#,###,##0.00").format(valueInCart)
-                        val text = resources.getString(R.string.unit_price_format, formattedStockValue)
-                        _stockValueInCart.value = text
-                    }
-                }
-            }catch(e:Exception){
-                _flowersInCart.value = null
-            }
+                     }
+                     val formattedStockValue = DecimalFormat("#,###,##0.00").format(valueInCart)
+                     val text = resources.getString(R.string.unit_price_format, formattedStockValue)
+                     _stockValueInCart.value = text
+                     _flowersInCart.value = flowerResult
+                 }
+             }catch(e:Exception){
+                 _flowersInCart.value = null
+             }
         }
         return true
     }

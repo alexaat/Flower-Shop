@@ -1,5 +1,6 @@
 package com.alexaat.flowershop.adapters
 
+
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
@@ -98,3 +99,4 @@ fun TextView.setTotal(myOrder:MyOrder){
     val formattedTotalPrice = DecimalFormat("#,###,##0.00").format(totalPrice)
     text = resources.getString(R.string.unit_price_format, formattedTotalPrice)
 }
+

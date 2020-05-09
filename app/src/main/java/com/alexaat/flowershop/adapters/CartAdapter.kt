@@ -1,5 +1,7 @@
 package com.alexaat.flowershop.adapters
 
+
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -68,7 +70,6 @@ class CartAdapter(private val onDeleteItemClickListener:OnDeleteItemClickListene
                 return TextViewHolderHeaderAndFooter(binding)
             }
         }
-
         fun bind(viewModel: CartFragmentViewModel){
             binding.viewModel = viewModel
             binding.executePendingBindings()

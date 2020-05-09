@@ -46,7 +46,7 @@ interface FlowersApiService{
 
     @FormUrlEncoded
     @HTTP(method = "DELETE", path = "flowers/cart/", hasBody = true)
-    fun removeFromCartAsync(@Field("id") id:Long):Deferred<Boolean>
+    fun removeFromCartAsync(@Field("id") id:Long):Deferred<List<Flower>>
 
     @GET("flowers/orders")
     fun getMyOrdersAsync():Deferred<List<MyOrder>>

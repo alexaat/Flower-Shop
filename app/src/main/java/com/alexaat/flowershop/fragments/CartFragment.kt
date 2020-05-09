@@ -50,8 +50,14 @@ class CartFragment : Fragment() {
 
     private fun setObservers(viewModel:CartFragmentViewModel, cartAdapter:CartAdapter){
         viewModel.flowersInCart.observe(viewLifecycleOwner, Observer {
-            it?.let{list->
-               cartAdapter.addHeaderAndFooterAndSubmitList(ArrayList(list))
+            if(it==null){
+                view?.let{view->
+                    val bar = Snackbar.make(view,getString(R.string.problem_with_internet_connection),Snackbar.LENGTH_SHORT)
+                    bar.view.setBackgroundResource(R.color.request_unsuccessful)
+                    bar.show()
+                }
+            }else{
+                cartAdapter.addHeaderAndFooterAndSubmitList(ArrayList(it))
             }
         })
 
@@ -60,7 +66,6 @@ class CartFragment : Fragment() {
                 if(isRemoved){
                     view?.let{v->
                         Snackbar.make(v,getString(R.string.item_is_removed_from_cart),Snackbar.LENGTH_SHORT).show()
-                        cartAdapter.notifyDataSetChanged()
                     }
                 }
             }
@@ -93,6 +98,8 @@ class CartFragment : Fragment() {
         viewModel.stockValueInCart.observe(viewLifecycleOwner,Observer{
             it?.let{
                 stockValueInCart = it
+                cartAdapter.notifyItemChanged(0)
+                cartAdapter.notifyItemChanged(cartAdapter.itemCount-1)
             }
         })
     }
