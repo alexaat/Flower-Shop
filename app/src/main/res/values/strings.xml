@@ -1,0 +1,74 @@
+<resources>
+    <string name="app_name">Flower Shop</string>
+    <string name="about">
+    This app is designed for demonstration purpose and is not meant for commercial use.
+    \nThis app is designed for training purpose.
+    \nObjectives:
+    \n - learn NavigationUI(menu, Up button, Drawer, Navigation Graph, Slide Animation and Safe Args)
+    \n - learn ViewModel architecture
+    \n - create ViewModel using ViewModelFactory
+    \n - implement Observer Pattern
+    \n - data binding between ViewModel and layout.xml
+    \n - data binding using binding adapter
+    \n - implement recycler view (Grid layout)
+    \n - implement recycler view (Linear layout)
+    \n - implement DiffUtil
+    \n - add header and footer to recycler view
+    \n - use Retrofit library to connect to internet
+    \n - use Glide library to download images
+    </string>
+    <string name="rules">
+        \u0020- tap icon to navigate to item details
+        \n - tap "+" button to add item to cart
+        \n - tap cart icon to navigate to cart
+        \n - once in cart, tab bin icon to remove item from cart
+        \n - tab buy icon to place an order
+        \n - in drawer menu tap My Orders to see historic orders
+        \n - in drawer tap Reset to undo all changes
+    </string>
+    <string name="about_menu_title">About</string>
+    <string name="rules_menu_title">Rules</string>
+    <string name="flower_list_title">Flower List</string>
+    <string name="flower_details_title">Flower details</string>
+    <string name="about_title">About</string>
+    <string name="rules_title">Rules</string>
+    <string name="unit_price_format">£ %s</string>
+    <string name="Item_is_added_to_cart">Item is added to cart</string>
+    <string name="cannot_add_item_to_cart">Couldn\'t add item to cart. Try again.</string>
+    <string name="cart">Cart</string>
+    <string name="item_is_removed_from_cart">Item is removed from cart</string>
+    <string name="reset">Reset</string>
+    <string name="item_is_out_of_stock">Item is out of stock</string>
+    <string name="confirm_purchase">Confirm purchase</string>
+    <string name="place_order">Place order</string>
+    <string name="cancel">Cancel</string>
+    <string name="reset_is_successful">Reset is successful</string>
+    <string name="could_not_reset">couldn\'t reset</string>
+    <string name="my_orders">My Orders</string>
+    <string name="my_orders_fragment_title">My Orders</string>
+    <string name="reset_dialog_title">Reset</string>
+    <string name="reset_dialog_text">Would you like to reset. All changes will be lost.</string>
+    <string name="reset_dialog_positive_button">Reset</string>
+    <string name="place_order_message">Would you like to place an order?</string>
+    <string name="place_order_message_with_price">Order value %s. Would you like to place an order?</string>
+    <string name="cart_is_empty">Cart is empty</string>
+    <string name="problem_with_internet_connection">There was a problem reading data. Please check internet connection</string>
+    <string name="no_orders_to_display">No orders to display</string>
+    <string name="buy">Buy</string>
+    <string name="status_image">status image</string>
+    <string name="drawer_header">drawer header</string>
+    <string name="flower_item_image">flower item image</string>
+    <string name="flower_details_image">flower details image</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="unit_price">Unit price</string>
+    <string name="number_in_stock">Number in stock</string>
+    <string name="cart_item_image">cart item image</string>
+    <string name="ordered">Ordered</string>
+    <string name="subtotal">Subtotal</string>
+    <string name="cart_item_remove_button">cart item remove button</string>
+    <string name="date">Date</string>
+    <string name="total">Total</string>
+    <string name="total_with_column">Total:</string>
+
+</resources>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="myOrder"
+            type="com.alexaat.flowershop.network.MyOrder"/>
+    </data>
+
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="4dp"
+    android:paddingBottom="4dp"
+    android:background="@drawable/item_boarder">
+
+    <TextView
+        android:id="@+id/my_orders_view_item_date_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/my_orders_view_item_date_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:setDate="@{myOrder}"
+        app:layout_constraintBaseline_toBaselineOf="@+id/my_orders_view_item_date_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="1 Jan 2020 15:45" />
+
+    <TextView
+        android:id="@+id/my_orders_view_item_ordered_items_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/ordered"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/my_orders_view_item_date_label" />
+
+    <TextView
+        android:id="@+id/my_orders_view_item_ordered_items_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/my_orders_view_item_ordered_items_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:setOrders="@{myOrder}"
+        tools:text="Item1 \nItem2 \nItem3" />
+
+    <TextView
+        android:id="@+id/my_orders_view_item_order_total_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="@string/total"
+        app:layout_constraintBaseline_toBaselineOf="@+id/my_orders_view_item_order_total_text"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/my_orders_view_item_order_total_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/my_orders_view_item_ordered_items_text"
+        tools:text="£30.45"
+        app:setTotal="@{myOrder}"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

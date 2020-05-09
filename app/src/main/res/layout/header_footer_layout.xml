@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.alexaat.flowershop.viewmodels.CartFragmentViewModel" />
+    </data>
+
+
+<androidx.constraintlayout.widget.ConstraintLayout
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:background="@drawable/item_boarder"
+     android:layout_marginBottom="4dp">
+
+    <TextView
+        android:id="@+id/header_footer_layout_total_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/total_with_column"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/header_footer_layout_total_text"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/header_footer_layout_total_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:textSize="24sp"
+        android:text="@{viewModel.stockValueInCart}"
+        app:layout_constraintBaseline_toBaselineOf="@+id/header_footer_layout_total_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="£24.05" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

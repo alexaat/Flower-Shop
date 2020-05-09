@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="clickListener"
+            type="com.alexaat.flowershop.adapters.ClickListener"/>
+
+        <variable
+            name="flower"
+            type="com.alexaat.flowershop.network.Flower" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp">
+
+    <ImageView
+        android:id="@+id/flower_list_item_image"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginBottom="4dp"
+        android:contentDescription="@string/flower_item_image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        android:onClick="@{() ->clickListener.click(flower.id)}"
+        app:setOverviewImage="@{flower}"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
