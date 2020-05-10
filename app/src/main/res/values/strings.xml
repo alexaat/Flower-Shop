@@ -16,6 +16,7 @@
     \n - add header and footer to recycler view
     \n - use Retrofit library to connect to internet
     \n - use Glide library to download images
+    \n - create backend Flower Shop database with REST API
     </string>
     <string name="rules">
         \u0020- tap icon to navigate to item details
