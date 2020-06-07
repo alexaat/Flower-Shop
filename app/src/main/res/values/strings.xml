@@ -17,6 +17,8 @@
     \n - use Retrofit library to connect to internet
     \n - use Glide library to download images
     \n - create backend Flower Shop database with REST API
+    \n - use alarm manager to schedule notifications
+    \n - display notification when there is an item in cart for long time
     </string>
     <string name="rules">
         \u0020- tap icon to navigate to item details
@@ -71,5 +73,13 @@
     <string name="date">Date</string>
     <string name="total">Total</string>
     <string name="total_with_column">Total:</string>
+
+    <string name="items_in_cart_notification_channel_id" translatable="false">items_in_cart_channel</string>
+    <string name="items_in_cart_notification_channel_name"  translatable="true">Items In Cart</string>
+    <string name="channel_description">Items in cart reminder</string>
+    <string name="items_in_cart_notification_title">Flower shop. Items in cart</string>
+    <string name="snooze">Snooze</string>
+    <string name="you_have_items_in_cart">You have items in cart</string>
+
 
 </resources>

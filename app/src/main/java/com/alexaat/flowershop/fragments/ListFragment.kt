@@ -1,9 +1,12 @@
 package com.alexaat.flowershop.fragments
 
-
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.*
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -14,10 +17,10 @@ import com.alexaat.flowershop.adapters.ClickListener
 import com.alexaat.flowershop.adapters.FlowerListAdapter
 import com.alexaat.flowershop.databinding.FragmentListBinding
 import com.alexaat.flowershop.viewmodels.ListFragmentViewModel
+import com.alexaat.flowershop.viewmodels.ListFragmentViewModelFactory
 import com.alexaat.flowershop.viewmodels.LoadingStatus
 import com.alexaat.flowershop.viewmodels.OnCartButtonClicked
 import com.google.android.material.snackbar.Snackbar
-
 
 class ListFragment : Fragment() {
 
@@ -25,18 +28,23 @@ class ListFragment : Fragment() {
     private lateinit var onResumeFragmentEvent: OnResumeFragmentEvent
     private var onCartIconChangeEvent:OnCartIconChangeEvent? = null
 
-
     override fun onResume() {
         onResumeFragmentEvent.onResume()
         super.onResume()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         setHasOptionsMenu(true)
 
+        createNotificationChannel(
+            channelId = getString(R.string.items_in_cart_notification_channel_id),
+            channelName = getString(R.string.items_in_cart_notification_channel_name)
+        )
+
         val binding: FragmentListBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_list, container, false)
-        val viewModel = ViewModelProvider(this).get(ListFragmentViewModel::class.java)
+        val viewModelFactory = ListFragmentViewModelFactory(requireActivity())
+        val viewModel = ViewModelProvider(this,viewModelFactory).get(ListFragmentViewModel::class.java)
         binding.lifecycleOwner = this
 
         onResumeFragmentEvent = OnResumeFragmentEvent{
@@ -120,6 +128,21 @@ class ListFragment : Fragment() {
         })
     }
 
+    private fun createNotificationChannel(channelId: String, channelName: String) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val descriptionText = getString(R.string.channel_description)
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val channel = NotificationChannel(channelId, channelName, importance).apply {
+                description = descriptionText
+                setShowBadge(false)
+                enableLights(true)
+                lightColor = Color.GREEN
+                enableVibration(true)
+            }
+            val notificationManager = requireActivity().getSystemService(NotificationManager::class.java) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
@@ -151,6 +174,7 @@ class ListFragment : Fragment() {
             }
         }
     }
+
 }
 
 class OnResumeFragmentEvent(private val listener: ()->Unit){
