@@ -1,54 +1,30 @@
 package com.alexaat.flowershop.viewmodels
 
-import android.app.AlarmManager
-import android.app.PendingIntent
+
 import android.content.Context
-import android.content.Context.ALARM_SERVICE
-import android.content.Intent
-import android.os.SystemClock
-import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.AlarmManagerCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.alexaat.flowershop.network.Flower
 import com.alexaat.flowershop.network.FlowersApi
-import com.alexaat.flowershop.receivers.AlarmReceiver
-import com.alexaat.flowershop.util.FIRST_ALARM
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-const val REQUEST_CODE_FIRST_ALARM = 0
 
 class ListFragmentViewModel(private val context: Context): ViewModel(){
 
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main )
 
-    //private var alarmManager: AlarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
-    //private val notifyIntent = Intent(context, AlarmReceiver::class.java)
-
-    //private val notifyPendingIntent1: PendingIntent
-
-//    init{
-//        notifyPendingIntent1 = PendingIntent.getBroadcast(
-//            context,
-//            REQUEST_CODE_FIRST_ALARM,
-//            notifyIntent,
-//            PendingIntent.FLAG_UPDATE_CURRENT
-//        )
-//
-//        setAlarm()
-//    }
-
     fun onResume(){
         getFlowers()
         checkCart()
+        checkMessages()
     }
+
+
 
     private val _navigateToDetailsFragment = MutableLiveData(-1L)
     val navigateToDetailsFragment:LiveData<Long>
@@ -61,6 +37,10 @@ class ListFragmentViewModel(private val context: Context): ViewModel(){
     private val _navigateToCartFragment = MutableLiveData(false)
     val navigateToCartFragment:LiveData<Boolean>
         get() = _navigateToCartFragment
+
+    private val _navigateToMessagesFragment = MutableLiveData(false)
+    val navigateToMessagesFragment:LiveData<Boolean>
+        get() = _navigateToMessagesFragment
 
     private val _notifyThatCarIsEmpty = MutableLiveData(false)
     val notifyThatCarIsEmpty:LiveData<Boolean>
@@ -78,6 +58,11 @@ class ListFragmentViewModel(private val context: Context): ViewModel(){
     val loadingStatus:LiveData<LoadingStatus>
         get() = _loadingStatus
 
+    private val _isNewMessage = MutableLiveData(false)
+    val isNewMessage:LiveData<Boolean>
+        get() = _isNewMessage
+
+
     private fun getFlowers(){
         _loadingStatus.value = LoadingStatus.LOADING
          coroutineScope.launch {
@@ -91,6 +76,25 @@ class ListFragmentViewModel(private val context: Context): ViewModel(){
                  _loadingStatus.value = LoadingStatus.FAIL
              }
          }
+    }
+
+    fun checkMessages(){
+        coroutineScope.launch(Dispatchers.IO){
+            val getMessagesDeferred = FlowersApi.retrofitService.getShopMessagesAsync()
+            try {
+                val result = getMessagesDeferred.await()
+                for(msg in result){
+                    if(!msg.opened){
+                        _isNewMessage.postValue(true)
+                        return@launch
+                    }
+                    _isNewMessage.postValue(false)
+                }
+            }catch(e:Exception){
+
+            }
+
+        }
     }
 
      override fun onCleared() {
@@ -123,6 +127,11 @@ class ListFragmentViewModel(private val context: Context): ViewModel(){
          }
      }
 
+     fun onMessagesButtonClicked(){
+        _navigateToMessagesFragment.value = true
+        _navigateToMessagesFragment.value = false
+    }
+
      private fun checkCart(){
          coroutineScope.launch {
              val getFlowersInCartDeferred = FlowersApi.retrofitService.getFlowersInCartAsync()
@@ -136,48 +145,6 @@ class ListFragmentViewModel(private val context: Context): ViewModel(){
          }
      }
 
-   //  private fun setAlarm(){
-
-//        coroutineScope.launch(Dispatchers.IO) {
-    //val getFlowersInCartDeferred = FlowersApi.retrofitService.getFlowersInCartAsync()
-//            try{
-//                val flowerResult = getFlowersInCartDeferred.await()
-//                if(flowerResult.isNotEmpty()){
-
-//
-//                    var triggerTime = SystemClock.elapsedRealtime() + FIRST_ALARM
-//                    AlarmManagerCompat.setExact(
-//                        alarmManager,
-//                        AlarmManager.ELAPSED_REALTIME_WAKEUP,
-//                        triggerTime,
-//                        notifyPendingIntent1
-//                    )
-
-
-//                    triggerTime = SystemClock.elapsedRealtime() + SECOND_ALARM
-//                    AlarmManagerCompat.setExactAndAllowWhileIdle(
-//                        alarmManager,
-//                        AlarmManager.ELAPSED_REALTIME_WAKEUP,
-//                        triggerTime,
-//                        notifyPendingIntent2
-//                    )
-//
-//
-//                    triggerTime = SystemClock.elapsedRealtime() + THIRD_ALARM
-//                    AlarmManagerCompat.setExactAndAllowWhileIdle(
-//                        alarmManager,
-//                        AlarmManager.ELAPSED_REALTIME_WAKEUP,
-//                        triggerTime,
-//                        notifyPendingIntent3
-//                    )
-    //                  Log.i("TAG","Alarm is set")
-//                }
-//            }catch(e:Exception){
-//            }
-//        }
-//}
-
-
 }
 
 class OnCartButtonClicked(val listener: ()->Unit){
@@ -185,6 +152,13 @@ class OnCartButtonClicked(val listener: ()->Unit){
         listener()
     }
 }
+
+class OnMessagesButtonClicked(val listener: ()->Unit){
+    fun onClick(){
+        listener()
+    }
+}
+
 
 enum class LoadingStatus{
     LOADING,

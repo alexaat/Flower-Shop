@@ -1,8 +1,11 @@
 package com.alexaat.flowershop.fragments
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -10,8 +13,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.alexaat.flowershop.NEW_MESSAGE_INTENT_ACTION
 import com.alexaat.flowershop.R
 import com.alexaat.flowershop.databinding.FragmentDetailsBinding
+import com.alexaat.flowershop.util.buzz
 import com.alexaat.flowershop.viewmodels.*
 import com.google.android.material.snackbar.Snackbar
 
@@ -20,6 +25,9 @@ class DetailsFragment : Fragment() {
     private lateinit var onCartButtonClicked: OnCartButtonClicked
     private var onCartIconChangeEvent:OnCartIconChangeEvent? = null
     private lateinit var onResumeFragmentEvent: OnResumeFragmentEvent
+    private lateinit var onMessagesButtonClicked: OnMessagesButtonClicked
+    private var onMessageIconChangeEvent:OnMessageIconChangeEvent? = null
+    private lateinit var receiver: BroadcastReceiver
 
     override fun onResume() {
         onResumeFragmentEvent.onResume()
@@ -45,14 +53,30 @@ class DetailsFragment : Fragment() {
             viewModel.onCartButtonClicked()
         }
 
+        onMessagesButtonClicked = OnMessagesButtonClicked{
+            viewModel.onMessagesButtonClicked()
+        }
+
         setHasOptionsMenu(true)
 
         val addToCartClickListener = AddToCartClickListener {
             viewModel.onAddToCartClicked(it)
         }
+
         binding.addToCartClickListener = addToCartClickListener
 
         setObservers(viewModel,binding)
+
+        val filter = IntentFilter()
+        filter.addAction(NEW_MESSAGE_INTENT_ACTION)
+        receiver = object: BroadcastReceiver(){
+            override fun onReceive(context: Context?, intent: Intent?) {
+                buzz(requireActivity().applicationContext)
+                viewModel.checkMessages()
+
+            }
+        }
+        requireActivity().registerReceiver(receiver,filter)
 
         return binding.root
     }
@@ -65,6 +89,7 @@ class DetailsFragment : Fragment() {
                 binding.executePendingBindings()
             }
         })
+
         viewModel.flowerMovedToCart.observe(viewLifecycleOwner, Observer {
             it?.let{movedToCart->
 
@@ -78,7 +103,9 @@ class DetailsFragment : Fragment() {
                     RequestResult.ConnectionError ->{
                         Toast.makeText(context,getString(R.string.cannot_add_item_to_cart),Toast.LENGTH_SHORT).show()
                     }
+
                 }
+
             }
         })
 
@@ -127,6 +154,19 @@ class DetailsFragment : Fragment() {
             }
         })
 
+        viewModel.navigateToMessagesFragment.observe(viewLifecycleOwner, Observer {
+            it?.let{navigate->
+                if(navigate){
+                    val navController = findNavController()
+                    val action = DetailsFragmentDirections.actionDetailsFragmentToMessagesFragment()
+                    navController.navigate(action)
+                }
+            }
+        })
+
+        viewModel.isNewMessage.observe(viewLifecycleOwner,Observer{
+            onMessageIconChangeEvent?.onIconChanged(it)
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -139,6 +179,14 @@ class DetailsFragment : Fragment() {
                 setCartIcon(menu,R.drawable.ic_cart_full)
             }
         }
+
+        onMessageIconChangeEvent = OnMessageIconChangeEvent{
+            if(it){
+                setMessageIcon(menu,R.drawable.ic_message_full)
+            }else{
+                setMessageIcon(menu,R.drawable.ic_message_empty)
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -146,18 +194,39 @@ class DetailsFragment : Fragment() {
             onCartButtonClicked.onClick()
             return true
         }
+        if(item.itemId == R.id.item_details_menu_message){
+            onMessagesButtonClicked.onClick()
+            return true
+        }
         return super.onOptionsItemSelected(item)
     }
 
     @Suppress("DEPRECATION")
-    private fun setCartIcon(menu: Menu, iconResource:Int){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            menu.getItem(0).icon = resources.getDrawable(iconResource, activity?.theme)
-        } else {
-            menu.getItem(0).icon = resources.getDrawable(iconResource)
+    private fun setCartIcon(menu: Menu, iconResource:Int) {
+        if (menu.size() > 1) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                menu.getItem(1).icon = resources.getDrawable(iconResource, activity?.theme)
+            } else {
+                menu.getItem(1).icon = resources.getDrawable(iconResource)
+            }
         }
     }
 
+    @Suppress("DEPRECATION")
+    private fun setMessageIcon(menu: Menu, iconResource:Int) {
+        if (menu.size() > 0) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                menu.getItem(0).icon = resources.getDrawable(iconResource, activity?.theme)
+            } else {
+                menu.getItem(0).icon = resources.getDrawable(iconResource)
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        requireActivity().unregisterReceiver(receiver)
+        super.onDestroy()
+    }
 }
 
 class AddToCartClickListener(private val listener: (id:Long) -> Unit){

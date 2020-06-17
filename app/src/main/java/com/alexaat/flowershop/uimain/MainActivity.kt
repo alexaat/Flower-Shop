@@ -19,7 +19,10 @@ import com.alexaat.flowershop.network.FlowersApi
 import com.alexaat.flowershop.util.*
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.*
+
+private val TOPIC = "FlowerShopMessages"
 
 class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelectedListener {
 
@@ -34,6 +37,13 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
             channelId = getString(R.string.items_in_cart_notification_channel_id),
             channelName = getString(R.string.items_in_cart_notification_channel_name)
         )
+
+        createNotificationChannel(
+            channelId=  getString(R.string.message_notification_channel_id),
+            channelName = getString(R.string.message_notification_channel_name)
+        )
+
+        FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
 
         binding = DataBindingUtil.setContentView(this,
             R.layout.activity_main
@@ -156,7 +166,10 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
 
     private fun createNotificationChannel(channelId: String, channelName: String) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val descriptionText = getString(R.string.channel_description)
+            val descriptionText =  when(channelId){
+                getString(R.string.items_in_cart_notification_channel_id) -> getString(R.string.items_in_cart_channel_description)
+                else -> getString(R.string.messages_channel_description)
+            }
             val importance = NotificationManager.IMPORTANCE_HIGH
             val channel = NotificationChannel(channelId, channelName, importance).apply {
                 description = descriptionText
@@ -179,6 +192,5 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
         super.onPause()
         setAlarms(applicationContext)
     }
-
 
 }

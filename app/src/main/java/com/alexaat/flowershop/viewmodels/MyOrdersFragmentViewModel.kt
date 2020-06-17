@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 class MyOrdersFragmentViewModel:ViewModel(){
 
     private var viewModelJob = Job()
-    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main )
+    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     private val _loadingStatus = MutableLiveData(LoadingStatus.LOADING)
     val loadingStatus:LiveData<LoadingStatus>

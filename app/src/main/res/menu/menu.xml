@@ -2,9 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
+    <item
+        android:id="@+id/item_details_menu_message"
+        android:icon="@drawable/ic_message_empty"
+        android:title="@string/messages"
+        app:showAsAction="ifRoom"/>
+
     <item
         android:id="@+id/item_details_menu_cart"
         android:icon="@drawable/ic_cart_empty"
         android:title="@string/cart"
         app:showAsAction="ifRoom"/>
+
+
+
 </menu>
