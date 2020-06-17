@@ -19,6 +19,7 @@
     \n - create backend Flower Shop database with REST API
     \n - use alarm manager to schedule notifications
     \n - display notification when there is an item in cart for long time
+    \n - implement Firebase fcm notification (to send message to app use http://alexaat.com/flowers/message)
     </string>
     <string name="rules">
         \u0020- tap icon to navigate to item details
@@ -28,6 +29,7 @@
         \n - tab buy icon to place an order
         \n - in drawer menu tap My Orders to see historic orders
         \n - in drawer tap Reset to undo all changes
+        \n - use this url to send message http://alexaat.com/flowers/message
     </string>
     <string name="about_menu_title">About</string>
     <string name="rules_menu_title">Rules</string>
