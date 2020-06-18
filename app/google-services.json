@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "879060512184",
+    "firebase_url": "https://flower-shop-messages.firebaseio.com",
+    "project_id": "flower-shop-messages",
+    "storage_bucket": "flower-shop-messages.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:879060512184:android:d64e69f0698514ae41734d",
+        "android_client_info": {
+          "package_name": "com.alexaat.flowershop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "879060512184-hbdh537rci73r3a32kv0crotf3ssi5vv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.alexaat.flowershop",
+            "certificate_hash": "6a1f8d50e5ff433b44add26aadb2d1b08d12638c"
+          }
+        },
+        {
+          "client_id": "879060512184-askc6rstjcibefd9a5c06ho5t318ictn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJQKK__McmHIXg4yFLNetw0uLIvrghiL4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "879060512184-askc6rstjcibefd9a5c06ho5t318ictn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
